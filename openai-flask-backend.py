@@ -8,7 +8,7 @@ load_dotenv()
 app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-@app.route("/chat", methods=["POST"])
+@app.route("/", methods=["POST"])
 def chat():
     user_input = request.json.get("message")
 
