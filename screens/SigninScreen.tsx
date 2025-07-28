@@ -10,16 +10,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import AnimatedBubbles from '../components/AnimatedBubbles';  // Import your bubbles
-
-
-type RootStackParamList = {
-  Welcome: undefined;
-  Signup: undefined;
-  SignIn: undefined;
-  ChildInfo: undefined;
-  Chatbot: undefined;
-};
+import AnimatedBubbles from '../components/AnimatedBubbles';  
+import { RootStackParamList } from './types';
 
 export default function SignInScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -120,8 +112,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
     bubblesContainer: {
-    ...StyleSheet.absoluteFillObject, // fill entire screen
-    // zIndex: -1,                       // behind content
+    ...StyleSheet.absoluteFillObject, 
+    // zIndex: -1,                       
   },
   keyboardContainer: {
     flex: 1,

@@ -9,59 +9,51 @@ import {
   ScrollView,
   Image,
   StyleSheet,
+  Alert,
 } from 'react-native';
-import AnimatedBubbles from '../components/AnimatedBubbles'; 
-import { useNavigation } from '@react-navigation/native';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import '../firebase'; 
-import { Alert } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import AnimatedBubbles from '../components/AnimatedBubbles';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase';
+import { RootStackParamList } from './types';
 
-
-
-  
 export default function SignupScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-
-  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [contact, setContact] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const auth = getAuth();
-  const db = getFirestore();
-
-  const handleSignup = async () => {
+  const handleSignup = async (): Promise<boolean> => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, contact, password);
       const user = userCredential.user;
 
-  
-await setDoc(doc(db, 'users', user.uid), {
-  parentName: username,
-  email: contact,
-  createdAt: new Date(),
-});
-
+      await setDoc(doc(db, 'users', user.uid), {
+        parentName: username,
+        email: contact,
+        createdAt: new Date(),
+      });
 
       Alert.alert('Success', 'User registered successfully!');
+      setError('');
+      return true;
     } catch (err: any) {
-      console.error(err);
       setError(err.message);
+      return false;
     }
   };
 
-
-
-  const navigation = useNavigation();
-
-
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (username && password && contact) {
-      navigation.navigate('ChildInfo');
+      const success = await handleSignup();
+      if (success) {
+        navigation.navigate('ChildInfo');
+      }
     } else {
-      alert('Please fill out all fields.');
+      Alert.alert('Error', 'Please fill out all fields.');
     }
   };
 
@@ -70,7 +62,6 @@ await setDoc(doc(db, 'users', user.uid), {
       <View style={styles.bubblesContainer}>
         <AnimatedBubbles />
       </View>
-
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -97,7 +88,7 @@ await setDoc(doc(db, 'users', user.uid), {
 
             <TextInput
               style={styles.input}
-              placeholder="Email or Phone Number"
+              placeholder="Email"
               value={contact}
               onChangeText={setContact}
               keyboardType="email-address"
@@ -112,6 +103,8 @@ await setDoc(doc(db, 'users', user.uid), {
               secureTextEntry
               placeholderTextColor="#666"
             />
+
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
             <TouchableOpacity style={styles.button} onPress={handleContinue}>
               <Text style={styles.buttonText}>Continue</Text>
@@ -130,7 +123,6 @@ const styles = StyleSheet.create({
   },
   bubblesContainer: {
     ...StyleSheet.absoluteFillObject,
-    // zIndex: -1,
   },
   keyboardContainer: {
     flex: 1,
@@ -182,5 +174,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginBottom: 8,
+    textAlign: 'center',
   },
 });

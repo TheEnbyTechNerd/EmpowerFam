@@ -6,12 +6,8 @@ import { Platform } from 'react-native';
 import AnimatedBubbles from '../components/AnimatedBubbles'; 
 import AnimatedLogo from '../components/AnimatedLogo';
 
-type RootStackParamList = {
-  Welcome: undefined;
-  Signup: undefined;
-  Signin: undefined;
-  ChildInfo: undefined;
-};
+import { RootStackParamList } from './types';
+
 
 
 type WelcomeScreenNavigationProp = NativeStackNavigationProp<
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   signupButton: {
-    backgroundColor: '#F7D08A', // different color for Sign Up if you want
+    backgroundColor: '#F7D08A', 
   },
   buttonText: {
     color: '#fff',

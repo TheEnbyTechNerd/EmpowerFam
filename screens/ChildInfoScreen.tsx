@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import AnimatedBubbles from '../components/AnimatedBubbles';
+import { RootStackParamList } from './types';
 
-type RootStackParamList = {
-  Interests: undefined;
-};
+
 
 const therapiesOptions = [
   'None',
@@ -37,6 +36,9 @@ const genderOptions = [
 export default function ChildInfoScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  <Text style={{fontSize: 40, color: 'red'}}>ChildInfoScreen</Text>
+
+
   const [childName, setChildName] = useState<string>('');
   const [age, setAge] = useState<string>('');
 
@@ -56,13 +58,10 @@ export default function ChildInfoScreen() {
     }
   };
 
-  const handleContinue = () => {
-    if (!childName.trim() || !age.trim() || !selectedGender) {
-      alert('Please complete all required fields.');
-      return;
-    }
-    navigation.navigate('Interests');
-  };
+const handleContinue = () => {
+  navigation.navigate('Interests');
+};
+
 
   return (
     <KeyboardAvoidingView
@@ -112,7 +111,7 @@ export default function ChildInfoScreen() {
           returnKeyType="next"
         />
 
-        {/* Gender selector as buttons */}
+
         <Text style={styles.label}>Gender</Text>
         <View style={styles.therapiesContainer}>
           {genderOptions.map((option) => {
@@ -144,7 +143,7 @@ export default function ChildInfoScreen() {
           })}
         </View>
 
-        {/* Therapies multi-select */}
+
         <Text style={styles.label}>Select Therapies</Text>
         <View style={styles.therapiesContainer}>
           {therapiesOptions.map((therapy) => {

@@ -13,6 +13,7 @@ import SignupScreen from './screens/SignupScreen';
 import ChildInfoScreen from './screens/ChildInfoScreen';
 import SignInScreen from './screens/SigninScreen';
 import ChatbotScreen from './screens/ChatbotScreen';
+import InterestsScreen from './screens/InterestsScreen';
 
 const Stack = createNativeStackNavigator();
 // const colorScheme = useColorScheme();
@@ -88,6 +89,13 @@ export default function App() {
             component={ChatbotScreen}
             options={{ headerShown: false }}
           />
+
+          <Stack.Screen
+            name="Interests"
+            component={InterestsScreen}
+            options={{ headerShown: false }}
+/>
+
 
 
         </Stack.Navigator>
